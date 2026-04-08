@@ -1,0 +1,132 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Background */
+body {
+    height: 100vh;
+    background-color: #f2f2f2; /* Light grey */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container */
+.login-container {
+    width: 100%;
+    padding: 20px;
+}
+
+/* Login Box */
+.login-box {
+    max-width: 400px;
+    width: 100%;
+    background: #ffffff;
+    padding: 40px 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    margin: auto;
+}
+
+/* Heading */
+.login-box h1 {
+    color: #2f5db3; /* Blue */
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+/* Subtitle */
+.subtitle {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+/* Inputs */
+.login-box input {
+    width: 100%;
+    padding: 14px 16px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 25px;
+    background-color: #f0f0f0; /* Soft grey */
+    font-size: 14px;
+    outline: none;
+    transition: 0.3s ease;
+}
+
+.login-box input:focus {
+    background-color: #e6e6e6;
+}
+
+/* Button */
+.login-box button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 25px;
+    background-color: #2f5db3;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    margin-top: 5px;
+}
+
+.login-box button:hover {
+    background-color: #244a91;
+}
+
+/* Forgot link */
+.forgot-link {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 13px;
+    color: #555;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.forgot-link:hover {
+    color: #2f5db3;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .login-box {
+        padding: 30px 20px;
+    }
+
+    .login-box h1 {
+        font-size: 24px;
+    }
+}
+.password-wrapper {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+#togglePassword {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#message {
+    margin-top: 15px;
+    font-size: 14px;
+    font-weight: 500;
+}
