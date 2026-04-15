@@ -35,6 +35,9 @@ const Navbar = () => {
         {user ? (
           <>
             <span>Welcome {user.email}</span>
+            <Link to="/join" style={styles.link}>
+              Join Course
+            </Link>
             <button style={styles.logoutBtn} onClick={handleLogout}>
               Logout
             </button>

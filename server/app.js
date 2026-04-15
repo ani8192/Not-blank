@@ -11,6 +11,7 @@ const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const studentRoutes = require("./routes/studentRoutes");
 const courseRoutes = require("./routes/courseRoutes");
+const enrollmentRoutes = require("./routes/enrollmentRoutes");
 
 const globalErrorHandler = require("./middleware/errorMiddleware");
 const AppError = require("./utils/appError");
@@ -55,6 +56,7 @@ app.use(`/api/${API_VERSION}/auth`, authRoutes);
 app.use(`/api/${API_VERSION}/admin`, adminRoutes);
 app.use(`/api/${API_VERSION}/student`, studentRoutes);
 app.use(`/api/${API_VERSION}/courses`, courseRoutes);
+app.use("/api/v1/enrollments", enrollmentRoutes);
 
 app.get("/", (req, res) => {
   res.json({

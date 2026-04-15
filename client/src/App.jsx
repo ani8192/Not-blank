@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -23,10 +23,15 @@ import Courses from "./pages/Courses";
 import Assignments from "./pages/Assignments";
 import Marks from "./pages/Marks";
 import Profile from "./pages/Profile";
+import MyCourses from "./pages/MyCourses";
+import JoinCourse from "./pages/JoinCourse";
+import CourseDetail from "./pages/CourseDetail";
+import CourseStudents from "./pages/CourseStudents";
 
 function App() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const { user } = useSelector((state) => state.auth);
 
   // restore user after refresh / new tab
   useEffect(() => {
@@ -85,10 +90,46 @@ function App() {
         />
 
         <Route
+          path="/my-courses"
+          element={
+            <ProtectedRoute>
+              <MyCourses />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/join"
+          element={
+            <ProtectedRoute>
+              <JoinCourse />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/courses"
           element={
             <ProtectedRoute>
-              <Courses />
+              <Courses user={user} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/course/:id"
+          element={
+            <ProtectedRoute>
+              <CourseDetail />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/course/:id/students"
+          element={
+            <ProtectedRoute>
+              <CourseStudents />
             </ProtectedRoute>
           }
         />

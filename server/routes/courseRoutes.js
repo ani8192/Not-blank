@@ -9,6 +9,8 @@ const {
   enrollCourse,
   getMyCourses,
   getCourseStudents,
+  removeCourseStudent,
+  checkCourseAccess,
 } = require("../controllers/courseController");
 
 const { protect } = require("../middleware/authMiddleware");
@@ -18,8 +20,8 @@ const { authorize } = require("../middleware/roleMiddleware");
 // COURSE ROUTES
 // ===============================
 
-// GET ALL COURSES ✅
-router.get("/",protect, getAllCourses); 
+// GET ALL COURSES
+router.get("/", protect, getAllCourses);
 
 // CREATE COURSE
 router.post(
@@ -28,6 +30,23 @@ router.post(
   authorize("teacher", "admin"),
   createCourse
 );
+
+// ===============================
+// STATIC NAMED ROUTES FIRST
+// (must come before any /:id routes)
+// ===============================
+
+// MY COURSES — must be before /:id or Express treats "my-courses" as an id
+router.get(
+  "/my-courses",
+  protect,
+  authorize("student"),
+  getMyCourses
+);
+
+// ===============================
+// DYNAMIC /:id ROUTES
+// ===============================
 
 // UPDATE COURSE
 router.patch(
@@ -45,10 +64,6 @@ router.delete(
   deleteCourse
 );
 
-// ===============================
-// ENROLLMENT ROUTES
-// ===============================
-
 // ENROLL
 router.post(
   "/:id/enroll",
@@ -57,23 +72,25 @@ router.post(
   enrollCourse
 );
 
-// MY COURSES
+// CHECK COURSE ACCESS
 router.get(
-  "/my-courses",
+  "/:id/access",
   protect,
-  authorize("student"),
-  getMyCourses
+  checkCourseAccess
 );
 
-// ===============================
-// COURSE STUDENTS
-// ===============================
-
+// GET COURSE STUDENTS
 router.get(
   "/:id/students",
   protect,
-  authorize("teacher", "admin"),
   getCourseStudents
+);
+
+// REMOVE STUDENT FROM COURSE
+router.delete(
+  "/:courseId/students/:userId",
+  protect,
+  removeCourseStudent
 );
 
 module.exports = router;

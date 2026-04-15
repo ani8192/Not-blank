@@ -8,7 +8,13 @@ const courseSchema = new mongoose.Schema(
     },
     teacher: {
       type: String,
+      ref: "User",
       required: true,
+    },
+    joinCode: {
+      type: String,
+      unique: true,
+      sparse: true, // legacy courses without a code; new courses always get joinCode in createCourse
     },
   },
   { timestamps: true }

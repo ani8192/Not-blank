@@ -1,26 +1,19 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/UserModel");
 const asyncHandler = require("express-async-handler");
-const AppError = require("../utils/appError");
+const User = require("../models/UserModel");
 
 exports.protect = asyncHandler(async (req, res, next) => {
   let token;
 
-  // ✅ FIRST check cookie
   if (req.cookies && req.cookies.token) {
     token = req.cookies.token;
   }
 
-  // ❌ fallback (optional)
-  else if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    token = req.headers.authorization.split(" ")[1];
-  }
-
   if (!token) {
-    return next(new AppError("Not authorized, no token", 401));
+    return res.status(401).json({
+      success: false,
+      message: "Not authorized",
+    });
   }
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -28,7 +21,10 @@ exports.protect = asyncHandler(async (req, res, next) => {
   const user = await User.findById(decoded.id);
 
   if (!user) {
-    return next(new AppError("User not found", 404));
+    return res.status(401).json({
+      success: false,
+      message: "User not found",
+    });
   }
 
   req.user = user;
