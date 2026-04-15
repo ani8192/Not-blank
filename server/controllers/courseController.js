@@ -75,15 +75,16 @@ exports.getAllCourses = async (req, res) => {
 exports.createCourse = async (req, res) => {
   try {
     const { title } = req.body;
-    const joinCode = generateCode();
+    const code = generateCode();
 
     const course = await Course.create({
       title,
       teacher: req.user._id,
-      joinCode,
+      code,
+      joinCode: code,
     });
 
-    console.log("JOIN CODE:", joinCode);
+    console.log("JOIN CODE:", code);
 
     res.status(201).json({
       success: true,

@@ -11,6 +11,11 @@ const courseSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    code: {
+      type: String,
+      unique: true,
+      required: true,
+    },
     joinCode: {
       type: String,
       unique: true,

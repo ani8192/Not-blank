@@ -126,6 +126,7 @@ const Courses = ({ user }) => {
 
               {/* BODY */}
               <div style={{ padding: "10px" }}>
+                <p>Code: {course.code}</p>
                 <p>
                   Teacher: {course.teacher?.name || "Unknown"}
                 </p>
