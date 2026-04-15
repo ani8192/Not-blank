@@ -3,11 +3,7 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/UserModel");
 
 exports.protect = asyncHandler(async (req, res, next) => {
-  let token;
-
-  if (req.cookies && req.cookies.token) {
-    token = req.cookies.token;
-  }
+  const token = req.cookies.token;
 
   if (!token) {
     return res.status(401).json({

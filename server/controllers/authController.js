@@ -48,13 +48,13 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
     return next(new AppError("Invalid credentials", 401));
   }
 
-  const accessToken = generateAccessToken(user);
+  const token = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
 
   user.refreshTokens.push({ token: refreshToken });
   await user.save();
 
-  res.cookie("token", accessToken, {
+  res.cookie("token", token, {
     httpOnly: true,
     secure: false,
     sameSite: "lax",
@@ -69,7 +69,7 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    accessToken,
+    accessToken: token,
     user: {
       id: user._id,
       email: user.email,

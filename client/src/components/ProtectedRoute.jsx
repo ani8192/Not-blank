@@ -2,20 +2,16 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const { user } = useSelector((state) => state.auth);
+  const { user, accessToken } = useSelector((state) => state.auth);
 
-  const token = localStorage.getItem("token");
-  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const storedUser = JSON.parse(localStorage.getItem("user") || "null");
 
-  // Redux + localStorage sync
   const currentUser = user || storedUser;
 
-  // not logged in
-  if (!token || !currentUser) {
+  if (!accessToken || !currentUser) {
     return <Navigate to="/login" replace />;
   }
 
-  // role-based protection
   if (allowedRoles && !allowedRoles.includes(currentUser.role)) {
     return <Navigate to="/dashboard" replace />;
   }

@@ -68,12 +68,17 @@ const Courses = ({ user }) => {
   };
 
   const handleLeave = async (id) => {
+    const confirmLeave = window.confirm(
+      "Are you sure you want to leave this course?"
+    );
+
+    if (!confirmLeave) return;
+
     try {
-      await axios.delete(`${ENROLL_URL}/${id}`, {
+      await axios.delete(`http://localhost:5000/api/v1/enrollments/${id}`, {
         withCredentials: true,
       });
 
-      setEnrolledCourses((prev) => prev.filter((courseId) => courseId !== id));
       setCourses((prev) => prev.filter((course) => course._id !== id));
     } catch (err) {
       alert("Leave failed");
@@ -103,7 +108,7 @@ const Courses = ({ user }) => {
         </div>
       )}
 
-      {/* GRID UI 🔥 */}
+      {/* GRID UI */}
       <div
         style={{
           display: "grid",
@@ -111,65 +116,62 @@ const Courses = ({ user }) => {
           gap: "20px",
         }}
       >
-        {courses.map((course) => {
-          const isEnrolled = enrolledCourses.includes(course._id);
-
-          return (
+        {courses.map((course) => (
+          <div
+            key={course._id}
+            onClick={() => navigate(`/course/${course._id}`)}
+            style={{
+              borderRadius: "10px",
+              overflow: "hidden",
+              cursor: "pointer",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+            }}
+          >
+            {/* TOP BLUE BAR */}
             <div
-              key={course._id}
-              onClick={() => navigate(`/course/${course._id}`)}
               style={{
-                borderRadius: "10px",
-                overflow: "hidden",
-                cursor: "pointer",
-                boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                background: "#4a90e2",
+                color: "white",
+                padding: "10px",
+                fontWeight: "bold",
               }}
             >
-              {/* TOP BLUE BAR */}
-              <div
-                style={{
-                  background: "#4a90e2",
-                  color: "white",
-                  padding: "10px",
-                  fontWeight: "bold",
-                }}
-              >
-                {course.title}
-              </div>
+              {course.title}
+            </div>
 
-              {/* BODY */}
-              <div style={{ padding: "10px" }}>
-                <p>Code: {course.code}</p>
-                <p>
-                  Teacher: {course.teacher?.name || "Unknown"}
-                </p>
+            {/* BODY */}
+            <div style={{ padding: "10px" }}>
+              <p>Code: {course.code}</p>
+              <p>
+                Teacher: {course.teacher?.name || "Unknown"}
+              </p>
 
-                {/* STUDENT BUTTON */}
-                {user?.role === "student" && (
+              {/* STUDENT BUTTON */}
+              {user?.role === "student" &&
+                (enrolledCourses.includes(course._id) ? (
                   <button
                     onClick={(e) => {
-                      e.stopPropagation(); // 🔥 prevent card click
-                      if (isEnrolled) {
-                        handleLeave(course._id);
-                      } else {
-                        handleEnroll(course._id);
-                      }
+                      e.stopPropagation();
+                      handleLeave(course._id);
                     }}
-                    style={{
-                      backgroundColor: isEnrolled ? "red" : "blue",
-                      color: "white",
-                      padding: "5px 10px",
-                      border: "none",
-                      borderRadius: "5px",
-                    }}
+                    style={{ backgroundColor: "red", color: "white" }}
                   >
-                    {isEnrolled ? "Leave" : "Enroll"}
+                    Leave
                   </button>
-                )}
-              </div>
+                ) : (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEnroll(course._id);
+                    }}
+                    style={{ backgroundColor: "blue", color: "white" }}
+                  >
+                    Enroll
+                  </button>
+                ))}
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </div>
   );

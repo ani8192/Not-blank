@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import api from "../api/axios";
 import { setCredentials } from "../features/auth/authSlice";
 
 const Login = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
@@ -39,13 +38,10 @@ const Login = () => {
 
       const { user, accessToken } = res.data;
 
-      
       dispatch(setCredentials({ user, accessToken }));
 
-      localStorage.setItem("token", accessToken);
       localStorage.setItem("user", JSON.stringify(user));
-
-      navigate("/dashboard");
+      window.location.href = "/courses";
     } catch (err) {
       const msg = err.response?.data?.message || "Login failed";
       setError(msg);

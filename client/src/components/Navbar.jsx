@@ -19,7 +19,6 @@ const Navbar = () => {
     } finally {
       dispatch(logout());
 
-      localStorage.removeItem("token");
       localStorage.removeItem("user");
 
       // 🔥 force reload (fixes blank/login issue)

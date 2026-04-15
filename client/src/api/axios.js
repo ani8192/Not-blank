@@ -2,6 +2,8 @@ import axios from "axios";
 import store from "../app/store";
 import { logout, setAccessToken } from "../features/auth/authSlice";
 
+axios.defaults.withCredentials = true;
+
 const api = axios.create({
   baseURL: "http://localhost:5000/api/v1",
   withCredentials: true,

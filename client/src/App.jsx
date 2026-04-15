@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -31,24 +32,45 @@ import CourseStudents from "./pages/CourseStudents";
 function App() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const { user } = useSelector((state) => state.auth);
+  const { user, accessToken } = useSelector((state) => state.auth);
 
-  // restore user after refresh / new tab
+  // restore auth from cookies after refresh / new tab
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user"));
+    const restoreAuth = async () => {
+      const storedUser = JSON.parse(localStorage.getItem("user") || "null");
 
-    if (token && user) {
-      dispatch(setCredentials({ user, accessToken: token }));
-    }
+      if (!storedUser) {
+        setLoading(false);
+        return;
+      }
 
-    setLoading(false);
+      try {
+        const res = await axios.post(
+          "http://localhost:5000/api/v1/auth/refresh-token",
+          {},
+          { withCredentials: true }
+        );
+
+        dispatch(
+          setCredentials({
+            user: storedUser,
+            accessToken: res.data.accessToken,
+          })
+        );
+      } catch (err) {
+        localStorage.removeItem("user");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    restoreAuth();
   }, [dispatch]);
 
   // wait until auth restore completes
   if (loading) return null;
 
-  const isLoggedIn = localStorage.getItem("token");
+  const isLoggedIn = !!accessToken;
 
   return (
     <BrowserRouter>
