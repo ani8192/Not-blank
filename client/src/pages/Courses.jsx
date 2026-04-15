@@ -67,6 +67,19 @@ const Courses = ({ user }) => {
     }
   };
 
+  const handleLeave = async (id) => {
+    try {
+      await axios.delete(`${ENROLL_URL}/${id}`, {
+        withCredentials: true,
+      });
+
+      setEnrolledCourses((prev) => prev.filter((courseId) => courseId !== id));
+      setCourses((prev) => prev.filter((course) => course._id !== id));
+    } catch (err) {
+      alert("Leave failed");
+    }
+  };
+
   useEffect(() => {
     fetchCourses();
     if (user?.role === "student") fetchMyCourses();
@@ -136,18 +149,21 @@ const Courses = ({ user }) => {
                   <button
                     onClick={(e) => {
                       e.stopPropagation(); // 🔥 prevent card click
-                      handleEnroll(course._id);
+                      if (isEnrolled) {
+                        handleLeave(course._id);
+                      } else {
+                        handleEnroll(course._id);
+                      }
                     }}
-                    disabled={isEnrolled}
                     style={{
-                      backgroundColor: isEnrolled ? "gray" : "blue",
+                      backgroundColor: isEnrolled ? "red" : "blue",
                       color: "white",
                       padding: "5px 10px",
                       border: "none",
                       borderRadius: "5px",
                     }}
                   >
-                    {isEnrolled ? "Enrolled" : "Enroll"}
+                    {isEnrolled ? "Leave" : "Enroll"}
                   </button>
                 )}
               </div>
